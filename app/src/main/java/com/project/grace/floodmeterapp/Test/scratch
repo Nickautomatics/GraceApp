@@ -1,0 +1,111 @@
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+
+    private void showLoadingDialog() {
+            dialog = ProgressDialog.show(MainActivity.this, "Location Info",
+                    "Loading. Please wait...", true);
+        }
+
+        private void closeLoadingDialog() {
+            dialog.dismiss();
+        }
+
+        private synchronized void showMap() {
+
+            Fragment fragment;
+            Bundle bundle = new Bundle();
+            showLoadingDialog();
+            boolean located = false;
+            while (!located) {
+                bundle.putDoubleArray("locale", new double[]{locale.getLatitude(), locale.getLongitude()});
+                System.out.println(locale.getLatitude() + " " + locale.getLongitude());
+
+            }
+            closeLoadingDialog();
+
+            fragment = MapsFragment.getInstance();
+            fragment.setArguments(bundle);
+
+            if (locale == null) {
+                fragment = MapsFragment.getInstance();
+            } else {
+                bundle = new Bundle();
+                bundle.putDoubleArray("locale", new double[]{locale.getLatitude(), locale.getLongitude()});
+                fragment = MapsFragment.getInstance();
+                fragment.setArguments(bundle);
+            }
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
+
+            bundle.putDoubleArray("locale", new double[]{locale.getLatitude(), locale.getLongitude()});
+            fragment = MapsFragment.getInstance();
+            fragment.setArguments(bundle);
+
+        }
+
+
+
+        //        googleApiClient = new GoogleApiClient.Builder(this)
+        //                .addConnectionCallbacks(this)
+        //                .addOnConnectionFailedListener(this)
+        //                .addApi(LocationServices.API)
+        //                .build();
+        //
+        //        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        //
+        //////        showLoadingDialog();
+        //        Fragment fragment;
+        //        Bundle bundle = new Bundle();
+        //
+        //
+        //        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //
+        ////        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        ////            buildAlertMessageNoGps();
+        ////        }
+        //        client = LocationServices.getFusedLocationProviderClient(this);
+        //        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //            return;
+        //        }
+        //
+        //        showLoadingDialog();
+        //        while(locale==null){
+        //            client.getLastLocation()
+        //                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+        //                        @Override
+        //                        public void onSuccess(Location location) {
+        //                            // Got last known location. In some rare situations this can be null.
+        //                            if (location != null) {
+        //                                // Logic to handle location object
+        //                                locale = location;
+        //                            }
+        //                        }
+        //                    });
+        //        }
+        //        closeLoadingDialog();
+        //
+        //
+        //        bundle.putDoubleArray("locale", new double[]{locale.getLatitude(), locale.getLongitude()});
+        //        System.out.println(locale);
+        //        fragment = MapsFragment.getInstance();
+        //        fragment.setArguments(bundle);
+        //        closeLoadingDialog();
